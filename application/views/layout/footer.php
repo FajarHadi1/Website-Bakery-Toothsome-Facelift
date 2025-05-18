@@ -79,7 +79,7 @@
   <script src="<?= base_url('assets/') ?>vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+  <!-- <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script> -->
   <script src="<?= base_url('assets/js/main.js') ?>"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.js"></script>
   <script type="text/javascript" >

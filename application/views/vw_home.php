@@ -129,8 +129,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-2 text-center">
-                    <img src="<?= base_url('assets/') ?> img/testimonials/testimonials-1.jpg" class="img-fluid testimonial-img" alt="">
+                  <div class="col-lg-2 text-center">          
+                    <img src="<?= base_url('assets/img/testimonials/testimonials-1.jpg') ?>" class="img-fluid testimonial-img" alt="">
                   </div>
                 </div>
               </div>
@@ -154,7 +154,7 @@
                     </div>
                   </div>
                   <div class="col-lg-2 text-center">
-                    <img src="<?= base_url('assets/') ?> img/testimonials/testimonials-2.jpg" class="img-fluid testimonial-img" alt="">
+                    <img src="<?= base_url('assets/img/testimonials/testimonials-2.jpg') ?>" class="img-fluid testimonial-img" alt="">
                   </div>
                 </div>
               </div>
@@ -178,7 +178,7 @@
                     </div>
                   </div>
                   <div class="col-lg-2 text-center">
-                    <img src="<?= base_url('assets/') ?> img/testimonials/testimonials-3.jpg" class="img-fluid testimonial-img" alt="">
+                    <img src="<?= base_url('assets/img/testimonials/testimonials-3.jpg') ?> " class="img-fluid testimonial-img" alt="">
                   </div>
                 </div>
               </div>
@@ -202,7 +202,7 @@
                     </div>
                   </div>
                   <div class="col-lg-2 text-center">
-                    <img src="<?= base_url('assets/') ?> img/testimonials/testimonials-4.jpg" class="img-fluid testimonial-img" alt="">
+                    <img src="<?= base_url('assets/img/testimonials/testimonials-4.jpg') ?>" class="img-fluid testimonial-img" alt="">
                   </div>
                 </div>
               </div>

@@ -15,20 +15,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @link      https://github.com/setdjod/myci-extension/
  * @param     ...
  * @return    ...
+ * 
  *
  */
 
 class Barang extends CI_Controller
 {
-    
-  public function __construct()
-  {
-    parent::__construct();
-	is_logged_in();
-    $this->load->model('Barang_model');
-  }
 
-  public function index()
+	public function __construct()
+	{
+		parent::__construct();
+		is_logged_in();
+		$this->load->model('Barang_model');
+		$this->load->library(['form_validation', 'upload', 'session']);
+	}
+
+	public function index()
 	{
 		$data['judul'] = "Halaman Barang";
 		$data['barang'] = $this->Barang_model->get();
@@ -40,51 +42,48 @@ class Barang extends CI_Controller
 	function tambah()
 	{
 		$data['judul'] = "Halaman Tambah Barang";
-
 		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-		$this->form_validation->set_rules('nama', 'Nama Barang', 'required', [
-			'required' => 'Nama Barang Wajib di isi'
-		]);
-		$this->form_validation->set_rules('stok', 'Stok', 'required', [
-			'required' => 'Stok Wajib di isi'
-		]);
-		$this->form_validation->set_rules('harga',  'Harga', 'required', [
-			'required' => 'Harga Wajib di isi'
-		]);
-		$this->form_validation->set_rules('keterangan',  'Keterangan', 'required', [
-			'required' => 'Keterangan Wajib di isi'
-		]);
+		$this->form_validation->set_rules('nama', 'Nama Barang', 'required', ['required' => 'Nama Barang Wajib di isi']);
+		$this->form_validation->set_rules('stok', 'Stok', 'required', ['required' => 'Stok Wajib di isi']);
+		$this->form_validation->set_rules('harga', 'Harga', 'required', ['required' => 'Harga Wajib di isi']);
+		$this->form_validation->set_rules('keterangan', 'Keterangan', 'required', ['required' => 'Keterangan Wajib di isi']);
+
 		if ($this->form_validation->run() == false) {
 			$this->load->view("layout/admin_header", $data);
 			$this->load->view("admin/vw_tambah_barang", $data);
-			$this->load->view("layout/admin_footer", $data);
+			$this->load->view("layout/admin_footer");
 		} else {
-			$data = [
-				'nama' => $this->input->post('nama'),
-				'stok' => $this->input->post('stok'),
-				'harga' => $this->input->post('harga'),
-				'keterangan' => $this->input->post('keterangan'),
-			];
-      $upload_image = $_FILES['gambar']['name'];
-      if ($upload_image) {
-          $config['allowed_types'] = 'gif|jpg|png|jpeg';
-          $config['max_size'] = '2048';
-          $config['upload_path'] = './assets/img/menu/';
-          $this->load->library('upload', $config);
-          if ($this->upload->do_upload('gambar')) {
-			$new_image = $this->upload->data('file_name');
-			$this->db->set('gambar', $new_image);
-          } else {
-          	echo $this->upload->display_errors();
-          }
-      }
-      $this->Barang_model->insert($data, $upload_image);
-      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data
-      Barang Berhasil Ditambah!</div>');
-      redirect('Barang');
+			$upload_image = $_FILES['gambar']['name'];
+			$gambar = '';
+
+			if ($upload_image) {
+				$config['allowed_types'] = 'gif|jpg|png|jpeg';
+				$config['upload_path'] = './assets/img/menu/';
+				$this->load->library('upload', $config);
+
+				if ($this->upload->do_upload('gambar')) {
+					$gambar = $this->upload->data('file_name');
+				} else {
+					echo $this->upload->display_errors();
+					return;
+				}
+			}
+
+			// Jalankan prosedur tersimpan
+			$nama = $this->input->post('nama');
+			$stok = $this->input->post('stok');
+			$harga = $this->input->post('harga');
+			$keterangan = $this->input->post('keterangan');
+
+			$sql = "CALL tambah_produk(?, ?, ?, ?, ?)";
+			$this->db->query($sql, array($nama, $stok, $harga, $keterangan, $gambar));
+
+			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Barang Berhasil Ditambah melalui Prosedur!</div>');
+			redirect('Barang');
 		}
 	}
+
 	public function hapus($id)
 	{
 		$this->Barang_model->delete($id);
@@ -109,10 +108,10 @@ class Barang extends CI_Controller
 		$this->form_validation->set_rules('stok', 'Stok', 'required', [
 			'required' => 'Stok Wajib di isi'
 		]);
-		$this->form_validation->set_rules('harga',  'Harga', 'required', [
+		$this->form_validation->set_rules('harga', 'Harga', 'required', [
 			'required' => 'Harga Wajib di isi'
 		]);
-		$this->form_validation->set_rules('keterangan',  'Keterangan', 'required', [
+		$this->form_validation->set_rules('keterangan', 'Keterangan', 'required', [
 			'required' => 'Keterangan Wajib di isi'
 		]);
 		if ($this->form_validation->run() == false) {
@@ -124,32 +123,33 @@ class Barang extends CI_Controller
 				'nama' => $this->input->post('nama'),
 				'stok' => $this->input->post('stok'),
 				'harga' => $this->input->post('harga'),
-				'keterangan' => $this->input->post('keterangand'),
+				'keterangan' => $this->input->post('keterangan'),
 			];
-      $upload_image = $_FILES['gambar']['name'];
-      if ($upload_image) {
-        $config['allowed_types'] = 'gif|jpg|png';
-        $config['max_size'] = '2048';
-        $config['upload_path'] = './assets/img/menu/';
-        $this->load->library('upload', $config);
-        if ($this->upload->do_upload('gambar')) {
-            $old_image = $data['barang']['gambar'];
-        if ($old_image != 'default.jpg') {
-            unlink(FCPATH . 'assets/img/barang/' . $old_image);
-        }
-        $new_image = $this->upload->data('file_name');
-        $this->db->set('gambar', $new_image);
-        } else {
-          echo $this->upload->display_errors();
-        }
-      }
-      $id = $this->input->post('id');
-      $this->Barang_model->update(['id' => $id], $data, $upload_image);
-      $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Barang Berhasil
+			$upload_image = $_FILES['gambar']['name'];
+			if ($upload_image) {
+				$config['allowed_types'] = 'gif|jpg|png';
+				$config['max_size'] = '2048';
+				$config['upload_path'] = './assets/img/menu/';
+				$this->load->library('upload', $config);
+				if ($this->upload->do_upload('gambar')) {
+					$old_image = $data['barang']['gambar'];
+					if ($old_image != 'default.jpg') {
+						unlink(FCPATH . 'assets/img/barang/' . $old_image);
+					}
+					$new_image = $this->upload->data('file_name');
+					$this->db->set('gambar', $new_image);
+				} else {
+					echo $this->upload->display_errors();
+				}
+			}
+			$id = $this->input->post('id');
+			$this->Barang_model->update(['id' => $id], $data, $upload_image);
+			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Barang Berhasil
       Diubah!</div>');
-      redirect('barang');
+			redirect('barang');
 		}
 	}
+	
 
 }
 

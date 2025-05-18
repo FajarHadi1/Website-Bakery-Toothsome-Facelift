@@ -34,7 +34,6 @@ class Home extends CI_Controller
   public function index()
   {
     $data['user'] = $this->userrole->getBy();
-    // $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
     $data['barang'] = $this->Barang_model->get();
     $data['jlh'] = $this->Keranjang_model->jumlah();
     $this->load->view("layout/header", $data);

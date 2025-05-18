@@ -15,7 +15,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @link      https://github.com/setdjod/myci-extension/
  * @param     ...
  * @return    ...
- *
+//  * @property CI_DB $db
+//  * @property CI_Session $session
+//  * @property Barang_model $Barang_model
+//  * @property Penjualan_model $Penjualan_model
+//  * @property User_model $User_model
+//  * @property Detail_model $Detail_model
  */
 
 class Admin extends CI_Controller
