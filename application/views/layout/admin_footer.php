@@ -50,7 +50,7 @@
     <!-- Custom scripts for all pages-->
     <script src="<?= base_url('assets/admin/') ?>js/sb-admin-2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.js"></script>
-    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script> -->
     <script src="<?= base_url('assets/admin/') ?>vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="<?= base_url('assets/admin/') ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="<?= base_url('assets/admin/') ?>vendor/chart.js/Chart.min.js"></script>

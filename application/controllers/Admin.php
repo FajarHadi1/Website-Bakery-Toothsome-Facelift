@@ -37,7 +37,6 @@ class Admin extends CI_Controller
 
   function index()
   {
-    // $data['judul'] = "Halaman Penjualan";
     $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
     $data['barang'] = $this->Barang_model->tbarang();
     $data['penjualan'] = $this->Penjualan_model->tpenjualan();

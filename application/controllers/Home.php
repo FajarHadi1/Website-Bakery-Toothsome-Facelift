@@ -20,7 +20,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Home extends CI_Controller
 {
-    
+
   public function __construct()
   {
     parent::__construct();
@@ -43,9 +43,16 @@ class Home extends CI_Controller
 
   public function barang()
   {
+    $start_time = microtime(true);
+
     $data['user'] = $this->userrole->getBy();
     $data['barang'] = $this->Barang_model->get();
     $data['jlh'] = $this->Keranjang_model->jumlah();
+    
+    $end_time = microtime(true);
+    $execution_time = $end_time - $start_time;
+    echo "<script>console.log('Waktu eksekusi index(): " . number_format($execution_time, 4) . " detik');</script>";
+    
     $this->load->view("layout/header", $data);
     $this->load->view("vw_barang", $data);
     $this->load->view("layout/header", $data);
@@ -61,11 +68,11 @@ class Home extends CI_Controller
     $this->form_validation->set_rules('jumlah', 'Jumlah', 'required', [
       'required' => 'Jumlah Wajib di isi'
     ]);
-    if($this->form_validation->run() == false){
+    if ($this->form_validation->run() == false) {
       $this->load->view("layout/header", $data);
       $this->load->view("vw_keranjang", $data);
       $this->load->view("layout/footer", $data);
-    }else{
+    } else {
       $data = [
         'id_user' => $this->session->userdata('id'),
         'id_barang' => $this->input->post('id'),
@@ -96,7 +103,7 @@ class Home extends CI_Controller
   {
     $this->Keranjang_model->delete($id);
     $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhadil dihapus dari keranjang!</div>');
-      redirect('Home/detail');
+    redirect('Home/detail');
   }
 
   public function pesanan()
@@ -133,7 +140,7 @@ class Home extends CI_Controller
       $data_detail[$i]['total'] = $this->input->post('total_p')[$i];
     }
     if ($this->Penjualan_model->insert($data_p, $upload_image) && $this->Detail_model->insert($data_detail)) {
-      for ($i = 0; $i < $jumlah_beli; $i++){
+      for ($i = 0; $i < $jumlah_beli; $i++) {
         $this->Barang_model->min_stok($data_detail[$i]['jumlah'], $data_detail[$i]['id_barang']) or die('gagal min stok');
       }
       $id_us = $this->session->userdata('id');
@@ -167,7 +174,7 @@ class Home extends CI_Controller
     $data['detailbeli'] = $this->Detail_model->getByUser($id);
     $data['jlh'] = $this->Keranjang_model->jumlah();
     $this->form_validation->set_rules('status', 'Status', 'required', [
-    'required' => 'Status Wajib di isi'
+      'required' => 'Status Wajib di isi'
     ]);
     if ($this->form_validation->run() == false) {
       $this->load->view("layout/header", $data);
